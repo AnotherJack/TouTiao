@@ -1,15 +1,14 @@
 package cn.edu.cuc.toutiao;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cn.edu.cuc.toutiao.fragments.FavFragment;
 import cn.edu.cuc.toutiao.fragments.HomeFragment;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setContentFragment(int position){
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (position){
             case 0:
