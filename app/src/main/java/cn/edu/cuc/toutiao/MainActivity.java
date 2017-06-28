@@ -1,6 +1,7 @@
 package cn.edu.cuc.toutiao;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -8,9 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -145,11 +150,27 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         switch (item.getItemId()){
             case R.id.add:
                 Toast.makeText(this,"add",Toast.LENGTH_SHORT).show();
+                showPopup();
                 break;
             case R.id.search:
                 Toast.makeText(this,"search",Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
+    }
+
+    private void showPopup(){
+        PopupWindow popupWindow = new PopupWindow(this);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setContentView(LayoutInflater.from(this).inflate(R.layout.layout_popup,null));
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
+
+        popupWindow.setAnimationStyle(R.style.popup_anim_style);
+
+        View mainContent = findViewById(R.id.main_content);
+        popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
     }
 }
