@@ -45,7 +45,7 @@ public class NewsListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView==null){
-            convertView = inflater.inflate(R.layout.news_item,null);
+            convertView = inflater.inflate(R.layout.news_item0,null);
             holder = new ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
 

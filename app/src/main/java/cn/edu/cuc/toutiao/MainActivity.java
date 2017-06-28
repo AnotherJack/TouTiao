@@ -1,14 +1,17 @@
 package cn.edu.cuc.toutiao;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.edu.cuc.toutiao.fragments.FavFragment;
 import cn.edu.cuc.toutiao.fragments.HomeFragment;
@@ -17,14 +20,18 @@ import cn.edu.cuc.toutiao.fragments.VideoFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
+    private Toolbar toolbar;
     private HomeFragment homeFragment;
     private VideoFragment videoFragment;
     private FavFragment favFragment;
     private ProfileFragment profileFragment;
+    private boolean canExit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 hideFragments(transaction);
                 transaction.show(homeFragment);
+                toolbar.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 if(videoFragment==null){
@@ -84,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 hideFragments(transaction);
                 transaction.show(favFragment);
+                toolbar.setVisibility(View.GONE);
                 break;
             case 3:
                 if(profileFragment==null){
@@ -109,6 +118,22 @@ public class MainActivity extends AppCompatActivity {
         }
         if(profileFragment!=null){
             transaction.hide(profileFragment);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(canExit){
+            finish();
+        }else {
+            canExit = true;
+            Toast.makeText(MainActivity.this,"再按一次就放你走",Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canExit = false;
+                }
+            },2000);
         }
     }
 }

@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
         newsTags.add(new NewsTag("5","世界"));
         newsTags.add(new NewsTag("5","世界"));
 
-        newsTabLayout = rootView.findViewById(R.id.newsTabLayout);
+        newsTabLayout = getActivity().findViewById(R.id.newsTabLayout);
         viewPager = rootView.findViewById(R.id.viewPager);
         viewPager.setAdapter(new NewsPagerAdapter(getActivity().getSupportFragmentManager(),newsTags));
         newsTabLayout.setupWithViewPager(viewPager);

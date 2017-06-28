@@ -1,19 +1,19 @@
 package cn.edu.cuc.toutiao.fragments;
 
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import cn.edu.cuc.toutiao.adapters.NewsListAdapter;
 import cn.edu.cuc.toutiao.R;
+import cn.edu.cuc.toutiao.adapters.NewsRvAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,9 +31,9 @@ import cn.edu.cuc.toutiao.R;
 public class NewsListFragment extends LazyFragment {
     private String type;
     private SwipeRefreshLayout swipeLayout;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private ArrayList<String> newsList = new ArrayList<>();
-    private NewsListAdapter newsListAdapter;
+    private NewsRvAdapter newsRvAdapter;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
     private boolean canLoadmore = false;
     private boolean loading = false;
@@ -67,15 +68,44 @@ public class NewsListFragment extends LazyFragment {
 //        tv.setText(type);
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeLayout);
         swipeLayout.setColorSchemeResources(R.color.colorAccent);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        newsListAdapter = new NewsListAdapter(getActivity(), newsList);
-        listView.setAdapter(newsListAdapter);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            listView.setNestedScrollingEnabled(true);
-        }
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(newsRvAdapter = new NewsRvAdapter(newsList));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                //获取最后一个完全显示的ItemPosition
+                int lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                if(lastVisibleItem >= (totalItemCount-3) && !loading && !swipeLayout.isRefreshing() && canLoadmore){
+                    //TODO 加载更多
+                    setLoading(true);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            newsList.add("1");
+                            newsList.add("2");
+                            newsList.add("3");
+                            newsList.add("4");
+                            newsList.add("5");
+                            newsList.add("6");
+                            newsList.add("7");
+                            newsList.add("8");
+                            newsList.add("9");
+                            newsList.add("10");
+                            newsList.add("11");
+                            newsRvAdapter.notifyDataSetChanged();
+                            setLoading(false);
+                        }
+                    }, 2000);
+                }
+            }
+        });
+//        recyclerView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
                 // 当不滚动时
 //                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
 //                    // 判断是否滚动到底部
@@ -102,35 +132,35 @@ public class NewsListFragment extends LazyFragment {
 //                        }, 2000);
 //                    }
 //                }
-            }
+//            }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if (view.getLastVisiblePosition() >= view.getCount() - 4 && !loading && !swipeLayout.isRefreshing() && canLoadmore) {
-                    //TODO 加载更多功能的代码
-                    setLoading(true);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            newsList.add("1");
-                            newsList.add("2");
-                            newsList.add("3");
-                            newsList.add("4");
-                            newsList.add("5");
-                            newsList.add("6");
-                            newsList.add("7");
-                            newsList.add("8");
-                            newsList.add("9");
-                            newsList.add("10");
-                            newsList.add("11");
-                            newsListAdapter.notifyDataSetChanged();
-                            setLoading(false);
-                        }
-                    }, 2000);
-                }
-            }
-        });
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//
+//                if (view.getLastVisiblePosition() >= view.getCount() - 4 && !loading && !swipeLayout.isRefreshing() && canLoadmore) {
+//                    //TODO 加载更多功能的代码
+//                    setLoading(true);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            newsList.add("1");
+//                            newsList.add("2");
+//                            newsList.add("3");
+//                            newsList.add("4");
+//                            newsList.add("5");
+//                            newsList.add("6");
+//                            newsList.add("7");
+//                            newsList.add("8");
+//                            newsList.add("9");
+//                            newsList.add("10");
+//                            newsList.add("11");
+//                            newsListAdapter.notifyDataSetChanged();
+//                            setLoading(false);
+//                        }
+//                    }, 2000);
+//                }
+//            }
+//        });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -150,7 +180,7 @@ public class NewsListFragment extends LazyFragment {
                         newsList.add("9");
                         newsList.add("10");
                         newsList.add("11");
-                        newsListAdapter.notifyDataSetChanged();
+                        newsRvAdapter.notifyDataSetChanged();
                         swipeLayout.setRefreshing(false);
                         canLoadmore = true;
                     }
@@ -158,13 +188,6 @@ public class NewsListFragment extends LazyFragment {
             }
         };
         swipeLayout.setOnRefreshListener(refreshListener);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(),i+"",Toast.LENGTH_SHORT).show();
-            }
-        });
 
         return rootView;
     }
@@ -186,9 +209,9 @@ public class NewsListFragment extends LazyFragment {
     private void setLoading(boolean bl) {
         this.loading = bl;
         if (bl) {
-            listView.addFooterView(footer_loadmore);
+            newsRvAdapter.addFooterView(footer_loadmore);
         } else {
-            listView.removeFooterView(footer_loadmore);
+            newsRvAdapter.removeFooterView(footer_loadmore);
         }
     }
 }
