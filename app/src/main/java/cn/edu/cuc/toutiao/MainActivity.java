@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -18,9 +19,9 @@ import cn.edu.cuc.toutiao.fragments.HomeFragment;
 import cn.edu.cuc.toutiao.fragments.ProfileFragment;
 import cn.edu.cuc.toutiao.fragments.VideoFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private TabLayout tabLayout;
-    private Toolbar toolbar;
+    private Toolbar homeToolbar;
     private HomeFragment homeFragment;
     private VideoFragment videoFragment;
     private FavFragment favFragment;
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        homeToolbar = (Toolbar) findViewById(R.id.toolbar);
+        homeToolbar.inflateMenu(R.menu.menu_home_toolbar);
+        homeToolbar.setOnMenuItemClickListener(this);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 hideFragments(transaction);
                 transaction.show(homeFragment);
-                toolbar.setVisibility(View.VISIBLE);
+                homeToolbar.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 if(videoFragment==null){
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 hideFragments(transaction);
                 transaction.show(favFragment);
-                toolbar.setVisibility(View.GONE);
+                homeToolbar.setVisibility(View.GONE);
                 break;
             case 3:
                 if(profileFragment==null){
@@ -135,5 +138,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             },2000);
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add:
+                Toast.makeText(this,"add",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.search:
+                Toast.makeText(this,"search",Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
     }
 }
