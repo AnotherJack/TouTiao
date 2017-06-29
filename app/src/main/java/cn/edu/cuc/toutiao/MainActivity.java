@@ -3,6 +3,8 @@ package cn.edu.cuc.toutiao;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,10 +13,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +30,10 @@ import cn.edu.cuc.toutiao.fragments.VideoFragment;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private TabLayout tabLayout;
-    private Toolbar homeToolbar;
+    private AppBarLayout appBarLayout;
+    private Toolbar toolbar;
+    private FrameLayout contentFrame;
+    private CoordinatorLayout.LayoutParams contentParams;
     private HomeFragment homeFragment;
     private VideoFragment videoFragment;
     private FavFragment favFragment;
@@ -37,9 +44,12 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        homeToolbar = (Toolbar) findViewById(R.id.toolbar);
-        homeToolbar.inflateMenu(R.menu.menu_home_toolbar);
-        homeToolbar.setOnMenuItemClickListener(this);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_home_toolbar);
+        toolbar.setOnMenuItemClickListener(this);
+        contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
+        contentParams = (CoordinatorLayout.LayoutParams) contentFrame.getLayoutParams();
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -47,11 +57,12 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 View bottomItem = tab.getCustomView();
-                CheckBox icon = (CheckBox) bottomItem.findViewById(R.id.icon);
-                TextView text = (TextView) bottomItem.findViewById(R.id.text);
+                CheckBox icon = bottomItem.findViewById(R.id.icon);
+                TextView text = bottomItem.findViewById(R.id.text);
                 icon.setChecked(true);
                 text.setTextColor(Color.parseColor("#ee1111"));
                 int position = tab.getPosition();
+                handleToolbar(position);
                 setContentFragment(position);
             }
 
@@ -83,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 }
                 hideFragments(transaction);
                 transaction.show(homeFragment);
-                homeToolbar.setVisibility(View.VISIBLE);
+                toolbar.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 if(videoFragment==null){
@@ -100,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 }
                 hideFragments(transaction);
                 transaction.show(favFragment);
-                homeToolbar.setVisibility(View.GONE);
+                toolbar.setVisibility(View.GONE);
                 break;
             case 3:
                 if(profileFragment==null){
@@ -172,5 +183,31 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         View mainContent = findViewById(R.id.main_content);
         popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
+    }
+    
+    private void handleToolbar(int position){
+        Menu menu = toolbar.getMenu();
+        switch (position){
+            case 0:
+                appBarLayout.setVisibility(View.VISIBLE);
+                menu.findItem(R.id.add).setVisible(true);
+                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
+                break;
+            case 1:
+                appBarLayout.setVisibility(View.VISIBLE);
+                menu.findItem(R.id.add).setVisible(false);
+                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
+                break;
+            case 2:
+                appBarLayout.setVisibility(View.GONE);
+                contentParams.setBehavior(null);
+                break;
+            case 3:
+                appBarLayout.setVisibility(View.VISIBLE);
+                toolbar.setVisibility(View.GONE);
+                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
+                break;
+        }
+        contentFrame.requestLayout();
     }
 }
