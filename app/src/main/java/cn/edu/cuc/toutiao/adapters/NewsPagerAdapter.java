@@ -35,4 +35,9 @@ public class NewsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return newsTags.get(position).getTitle();
     }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }

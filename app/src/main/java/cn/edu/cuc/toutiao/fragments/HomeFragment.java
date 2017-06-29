@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -77,7 +78,6 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case R.id.add:
-                Toast.makeText(getActivity(),"add",Toast.LENGTH_SHORT).show();
                 showPopup();
                 break;
             case R.id.search:
@@ -89,14 +89,29 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
 
     private void showPopup(){
         if(popupWindow==null){
+            //init popupWindow
             popupWindow = new PopupWindow(getActivity());
             popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
             popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-            popupWindow.setContentView(LayoutInflater.from(getActivity()).inflate(R.layout.layout_popup,null));
+            View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_popup,null);
+            ImageView close = popupView.findViewById(R.id.close);
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                }
+            });
+            popupWindow.setContentView(popupView);
             popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
             popupWindow.setOutsideTouchable(false);
             popupWindow.setFocusable(true);
             popupWindow.setAnimationStyle(R.style.popup_anim_style);
+            popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    Toast.makeText(getActivity(),"dismiss",Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
