@@ -28,12 +28,8 @@ import cn.edu.cuc.toutiao.fragments.HomeFragment;
 import cn.edu.cuc.toutiao.fragments.ProfileFragment;
 import cn.edu.cuc.toutiao.fragments.VideoFragment;
 
-public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
-    private AppBarLayout appBarLayout;
-    private Toolbar toolbar;
-    private FrameLayout contentFrame;
-    private CoordinatorLayout.LayoutParams contentParams;
     private HomeFragment homeFragment;
     private VideoFragment videoFragment;
     private FavFragment favFragment;
@@ -44,12 +40,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_home_toolbar);
-        toolbar.setOnMenuItemClickListener(this);
-        contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
-        contentParams = (CoordinatorLayout.LayoutParams) contentFrame.getLayoutParams();
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -62,15 +52,14 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 icon.setChecked(true);
                 text.setTextColor(Color.parseColor("#ee1111"));
                 int position = tab.getPosition();
-                handleToolbar(position);
                 setContentFragment(position);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 View bottomItem = tab.getCustomView();
-                CheckBox icon = (CheckBox) bottomItem.findViewById(R.id.icon);
-                TextView text = (TextView) bottomItem.findViewById(R.id.text);
+                CheckBox icon = bottomItem.findViewById(R.id.icon);
+                TextView text = bottomItem.findViewById(R.id.text);
                 icon.setChecked(false);
                 text.setTextColor(Color.parseColor("#555555"));
 
@@ -83,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         });
     }
 
+    //设置显示哪个fragment
     private void setContentFragment(int position){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -94,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 }
                 hideFragments(transaction);
                 transaction.show(homeFragment);
-                toolbar.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 if(videoFragment==null){
@@ -111,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 }
                 hideFragments(transaction);
                 transaction.show(favFragment);
-                toolbar.setVisibility(View.GONE);
                 break;
             case 3:
                 if(profileFragment==null){
@@ -124,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         }
         transaction.commit();
     }
+
     //hide所有的fragment
     private void hideFragments( FragmentTransaction transaction){
         if(homeFragment!=null){
@@ -140,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         }
     }
 
+    //重写返回键事件
     @Override
     public void onBackPressed() {
         if(canExit){
@@ -154,60 +144,5 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 }
             },2000);
         }
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.add:
-                Toast.makeText(this,"add",Toast.LENGTH_SHORT).show();
-                showPopup();
-                break;
-            case R.id.search:
-                Toast.makeText(this,"search",Toast.LENGTH_SHORT).show();
-                break;
-        }
-        return true;
-    }
-
-    private void showPopup(){
-        PopupWindow popupWindow = new PopupWindow(this);
-        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.setContentView(LayoutInflater.from(this).inflate(R.layout.layout_popup,null));
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setFocusable(true);
-
-        popupWindow.setAnimationStyle(R.style.popup_anim_style);
-
-        View mainContent = findViewById(R.id.main_content);
-        popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
-    }
-    
-    private void handleToolbar(int position){
-        Menu menu = toolbar.getMenu();
-        switch (position){
-            case 0:
-                appBarLayout.setVisibility(View.VISIBLE);
-                menu.findItem(R.id.add).setVisible(true);
-                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
-                break;
-            case 1:
-                appBarLayout.setVisibility(View.VISIBLE);
-                menu.findItem(R.id.add).setVisible(false);
-                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
-                break;
-            case 2:
-                appBarLayout.setVisibility(View.GONE);
-                contentParams.setBehavior(null);
-                break;
-            case 3:
-                appBarLayout.setVisibility(View.VISIBLE);
-                toolbar.setVisibility(View.GONE);
-                contentParams.setBehavior(new AppBarLayout.ScrollingViewBehavior());
-                break;
-        }
-        contentFrame.requestLayout();
     }
 }
