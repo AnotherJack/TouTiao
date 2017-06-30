@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:clipToPadding="false"
+        android:paddingTop="60dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        />
+    <fragment
+        android:id="@+id/fragment"
+        android:name="cn.edu.cuc.toutiao.fragments.NewsListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:clipToPadding="false"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"/>
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:floatingSearch_searchBarMarginLeft="2dp"
+        app:floatingSearch_searchBarMarginTop="4dp"
+        app:floatingSearch_searchBarMarginRight="2dp"
+        app:floatingSearch_searchHint="搜点什么吧"
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_showSearchKey="true"
+        app:floatingSearch_menu="@menu/menu_home_toolbar"
+        app:floatingSearch_dismissOnOutsideTouch="true"
+        app:floatingSearch_leftActionMode="showHome"
+        />
+</RelativeLayout>

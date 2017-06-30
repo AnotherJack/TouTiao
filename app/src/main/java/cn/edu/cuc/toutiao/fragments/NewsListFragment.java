@@ -103,64 +103,6 @@ public class NewsListFragment extends LazyFragment {
                 }
             }
         });
-//        recyclerView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                // 当不滚动时
-//                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-//                    // 判断是否滚动到底部
-//                    if (view.getLastVisiblePosition() >= view.getCount() - 4 && !loading && !swipeLayout.isRefreshing() && canLoadmore) {
-//                        //TODO 加载更多功能的代码
-//                        setLoading(true);
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                newsList.add("1");
-//                                newsList.add("2");
-//                                newsList.add("3");
-//                                newsList.add("4");
-//                                newsList.add("5");
-//                                newsList.add("6");
-//                                newsList.add("7");
-//                                newsList.add("8");
-//                                newsList.add("9");
-//                                newsList.add("10");
-//                                newsList.add("11");
-//                                newsListAdapter.notifyDataSetChanged();
-//                                setLoading(false);
-//                            }
-//                        }, 2000);
-//                    }
-//                }
-//            }
-
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//
-//                if (view.getLastVisiblePosition() >= view.getCount() - 4 && !loading && !swipeLayout.isRefreshing() && canLoadmore) {
-//                    //TODO 加载更多功能的代码
-//                    setLoading(true);
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            newsList.add("1");
-//                            newsList.add("2");
-//                            newsList.add("3");
-//                            newsList.add("4");
-//                            newsList.add("5");
-//                            newsList.add("6");
-//                            newsList.add("7");
-//                            newsList.add("8");
-//                            newsList.add("9");
-//                            newsList.add("10");
-//                            newsList.add("11");
-//                            newsListAdapter.notifyDataSetChanged();
-//                            setLoading(false);
-//                        }
-//                    }, 2000);
-//                }
-//            }
-//        });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -206,6 +148,7 @@ public class NewsListFragment extends LazyFragment {
 
     }
 
+    //切换加载更多状态
     private void setLoading(boolean bl) {
         this.loading = bl;
         if (bl) {

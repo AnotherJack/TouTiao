@@ -1,6 +1,7 @@
 package cn.edu.cuc.toutiao.fragments;
 
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import cn.edu.cuc.toutiao.R;
+import cn.edu.cuc.toutiao.SearchActivity;
 import cn.edu.cuc.toutiao.adapters.NewsPagerAdapter;
 import cn.edu.cuc.toutiao.beans.NewsTag;
 
@@ -32,6 +34,7 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     private TabLayout newsTabLayout;
     private ViewPager viewPager;
     private ArrayList<NewsTag> newsTags = new ArrayList<>();
+    private NewsPagerAdapter newsPagerAdapter;
     private PopupWindow popupWindow;
 
     public HomeFragment() {
@@ -65,7 +68,8 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         toolbar.inflateMenu(R.menu.menu_home_toolbar);
         toolbar.setOnMenuItemClickListener(this);
 
-        viewPager.setAdapter(new NewsPagerAdapter(getActivity().getSupportFragmentManager(),newsTags));
+        newsPagerAdapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager(),newsTags);
+        viewPager.setAdapter(newsPagerAdapter);
 
         newsTabLayout.setupWithViewPager(viewPager);
         newsTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -81,7 +85,8 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
                 showPopup();
                 break;
             case R.id.search:
-                Toast.makeText(getActivity(),"search",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), SearchActivity.class);
+                startActivity(i);
                 break;
         }
         return true;
@@ -110,6 +115,10 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
                 @Override
                 public void onDismiss() {
                     Toast.makeText(getActivity(),"dismiss",Toast.LENGTH_SHORT).show();
+                    newsTags.add(new NewsTag("6","新增"));
+                    newsTags.remove(1);
+                    newsPagerAdapter.notifyDataSetChanged();
+
                 }
             });
         }
