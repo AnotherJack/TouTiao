@@ -1,6 +1,8 @@
 package cn.edu.cuc.toutiao.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,7 +19,9 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.R;
 import cn.edu.cuc.toutiao.adapters.NewsPagerAdapter;
 import cn.edu.cuc.toutiao.beans.NewsTag;
@@ -32,6 +36,7 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     private TabLayout newsTabLayout;
     private ViewPager viewPager;
     private ArrayList<NewsTag> newsTags = new ArrayList<>();
+    private ArrayList<String> photoUrls = new ArrayList<>();
     private PopupWindow popupWindow;
 
     public HomeFragment() {
@@ -48,6 +53,7 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
         newsTags.add(new NewsTag("1","综合"));
         newsTags.add(new NewsTag("2","国内"));
         newsTags.add(new NewsTag("3","国外"));
@@ -56,6 +62,14 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         newsTags.add(new NewsTag("5","世界"));
         newsTags.add(new NewsTag("5","世界"));
         newsTags.add(new NewsTag("5","世界"));
+
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/EternalFlame_EN-CA10974314579_1920x1080.jpg");
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/SunwaptaFalls_PT-BR9240176817_1920x1080.jpg");
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/OsmaniaHospital_EN-IN8052196074_1920x1080.jpg");
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/TourdefranceD_EN-AU8654672839_1920x1080.jpg");
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/LakePukaki_ROW12938827408_1920x1080.jpg");
+        photoUrls.add("http://www.bing.com/az/hprichbg/rb/RanwuLake_EN-CA11972106071_1920x1080.jpg");
+        photoUrls.add("http://blog.pic.xiaokui.io/5bc23947c22f5ea4bf0cf4fecb85c19b");
 
         mainContent = rootView.findViewById(R.id.main_content);
         toolbar = rootView.findViewById(R.id.toolbar);
@@ -78,7 +92,8 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case R.id.add:
-                showPopup();
+//                showPopup();
+                browsePhotos(getActivity(),photoUrls,3);
                 break;
             case R.id.search:
                 Toast.makeText(getActivity(),"search",Toast.LENGTH_SHORT).show();
@@ -115,5 +130,12 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         }
 
         popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
+    }
+
+    private void browsePhotos(Context context, ArrayList<String> urls,int initialIndex){
+        Intent i = new Intent(context,PhotoActivity.class);
+        i.putStringArrayListExtra("urls",urls);
+        i.putExtra("initialIndex",initialIndex);
+        startActivity(i);
     }
 }
