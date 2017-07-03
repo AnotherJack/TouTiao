@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_search_white"
         app:showAsAction="always" />
     <item
+        android:id="@+id/edit"
+        android:title="edit"
+        android:icon="@drawable/ic_edit_white_24dp"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/add"
         android:title="add"
         android:icon="@drawable/ic_add_white"

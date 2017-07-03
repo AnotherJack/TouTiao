@@ -43,5 +43,6 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'com.github.arimorty:floatingsearchview:2.1.1'
     compile 'org.greenrobot:greendao:3.2.2'
+    compile 'jp.wasabeef:richeditor-android:1.2.2'
     testCompile 'junit:junit:4.12'
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.edu.cuc.toutiao.EditorActivity;
 import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.R;
 import cn.edu.cuc.toutiao.SearchActivity;
@@ -100,9 +101,13 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
 //                showPopup();
                 MyApp.browsePhotos(getActivity(),photoUrls,3);
                 break;
+            case R.id.edit:
+                Intent editIntent = new Intent(getActivity(), EditorActivity.class);
+                startActivity(editIntent);
+                break;
             case R.id.search:
-                Intent i = new Intent(getActivity(), SearchActivity.class);
-                startActivity(i);
+                Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(searchIntent);
                 break;
         }
         return true;
