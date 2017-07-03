@@ -10,6 +10,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
+import cn.edu.cuc.toutiao.application.MyApp;
 import cn.edu.cuc.toutiao.greendao.SearchRecord;
 import cn.edu.cuc.toutiao.greendao.SearchRecordDao;
 

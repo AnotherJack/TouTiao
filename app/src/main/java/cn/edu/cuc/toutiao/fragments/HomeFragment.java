@@ -26,6 +26,7 @@ import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.R;
 import cn.edu.cuc.toutiao.SearchActivity;
 import cn.edu.cuc.toutiao.adapters.NewsPagerAdapter;
+import cn.edu.cuc.toutiao.application.MyApp;
 import cn.edu.cuc.toutiao.beans.NewsTag;
 
 
@@ -97,7 +98,7 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         switch (item.getItemId()){
             case R.id.add:
 //                showPopup();
-                browsePhotos(getActivity(),photoUrls,3);
+                MyApp.browsePhotos(getActivity(),photoUrls,3);
                 break;
             case R.id.search:
                 Intent i = new Intent(getActivity(), SearchActivity.class);
@@ -139,12 +140,5 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         }
 
         popupWindow.showAtLocation(mainContent, Gravity.CENTER,0,0);
-    }
-
-    private void browsePhotos(Context context, ArrayList<String> urls,int initialIndex){
-        Intent i = new Intent(context,PhotoActivity.class);
-        i.putStringArrayListExtra("urls",urls);
-        i.putExtra("initialIndex",initialIndex);
-        startActivity(i);
     }
 }

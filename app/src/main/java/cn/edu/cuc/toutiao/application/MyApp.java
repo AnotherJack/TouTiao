@@ -1,8 +1,13 @@
-package cn.edu.cuc.toutiao;
+package cn.edu.cuc.toutiao.application;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+
+import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.greendao.DaoMaster;
 import cn.edu.cuc.toutiao.greendao.DaoSession;
 
@@ -19,6 +24,10 @@ public class MyApp extends Application {
         setUpDatabase();
     }
 
+    public static DaoSession getDaoSession(){
+        return daoSession;
+    }
+
     private void setUpDatabase(){
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "db-name", null);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -26,7 +35,10 @@ public class MyApp extends Application {
         daoSession = daoMaster.newSession();
     }
 
-    public static DaoSession getDaoSession(){
-        return daoSession;
+    public static void browsePhotos(Context context, ArrayList<String> urls, int initialIndex){
+        Intent i = new Intent(context,PhotoActivity.class);
+        i.putStringArrayListExtra("urls",urls);
+        i.putExtra("initialIndex",initialIndex);
+        context.startActivity(i);
     }
 }
