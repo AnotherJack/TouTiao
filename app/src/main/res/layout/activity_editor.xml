@@ -39,7 +39,7 @@
             <CheckBox
                 android:id="@+id/underline"
                 style="@style/editor_item"
-                android:background="@drawable/underline_checkbox_selector"
+                android:background="@drawable/underlined_checkbox_selector"
                 android:button="@null"/>
             <CheckBox
                 android:id="@+id/strikethrough"
