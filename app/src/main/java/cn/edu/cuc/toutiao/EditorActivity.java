@@ -2,10 +2,13 @@ package cn.edu.cuc.toutiao;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
@@ -45,6 +48,14 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
                 italic.setChecked(types.contains(RichEditor.Type.ITALIC));
                 underline.setChecked(types.contains(RichEditor.Type.UNDERLINE));
                 strikethrough.setChecked(types.contains(RichEditor.Type.STRIKETHROUGH));
+                Log.d("Decoration","----------"+text);
+            }
+        });
+
+        editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                Log.d("Text","-----------"+text);
             }
         });
     }
