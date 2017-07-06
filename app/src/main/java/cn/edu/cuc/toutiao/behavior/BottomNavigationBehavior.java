@@ -1,10 +1,8 @@
-package cn.edu.cuc.toutiao.behaviors;
+package cn.edu.cuc.toutiao.behavior;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;

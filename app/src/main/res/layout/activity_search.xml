@@ -17,7 +17,7 @@
         />
     <fragment
         android:id="@+id/fragment"
-        android:name="cn.edu.cuc.toutiao.fragments.NewsListFragment"
+        android:name="cn.edu.cuc.toutiao.fragment.NewsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"

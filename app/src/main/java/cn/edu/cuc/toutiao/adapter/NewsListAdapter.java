@@ -1,4 +1,4 @@
-package cn.edu.cuc.toutiao.adapters;
+package cn.edu.cuc.toutiao.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

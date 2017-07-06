@@ -1,4 +1,4 @@
-package cn.edu.cuc.toutiao.widgets;
+package cn.edu.cuc.toutiao.widget;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

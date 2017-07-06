@@ -1,4 +1,4 @@
-package cn.edu.cuc.toutiao.behaviors;
+package cn.edu.cuc.toutiao.behavior;
 
 /**
  * Created by Nikola on 11/22/2015.

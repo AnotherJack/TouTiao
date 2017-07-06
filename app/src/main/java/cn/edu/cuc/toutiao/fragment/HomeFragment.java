@@ -1,8 +1,6 @@
-package cn.edu.cuc.toutiao.fragments;
+package cn.edu.cuc.toutiao.fragment;
 
 
-import android.content.Intent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,15 +18,13 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.edu.cuc.toutiao.EditorActivity;
-import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.R;
 import cn.edu.cuc.toutiao.SearchActivity;
-import cn.edu.cuc.toutiao.adapters.NewsPagerAdapter;
+import cn.edu.cuc.toutiao.adapter.NewsPagerAdapter;
 import cn.edu.cuc.toutiao.application.MyApp;
-import cn.edu.cuc.toutiao.beans.NewsTag;
+import cn.edu.cuc.toutiao.bean.NewsTag;
 
 
 /**

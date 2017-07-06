@@ -1,7 +1,6 @@
-package cn.edu.cuc.toutiao.fragments;
+package cn.edu.cuc.toutiao.fragment;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,17 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
-import cn.edu.cuc.toutiao.adapters.NewsListAdapter;
 import cn.edu.cuc.toutiao.R;
-import cn.edu.cuc.toutiao.adapters.NewsRvAdapter;
+import cn.edu.cuc.toutiao.adapter.NewsRvAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

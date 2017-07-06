@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cn.edu.cuc.toutiao.adapters.PhotoPagerAdapter;
-import cn.edu.cuc.toutiao.widgets.HackyViewPager;
+import cn.edu.cuc.toutiao.adapter.PhotoPagerAdapter;
+import cn.edu.cuc.toutiao.widget.HackyViewPager;
 
 public class PhotoActivity extends AppCompatActivity {
     private HackyViewPager viewPager;

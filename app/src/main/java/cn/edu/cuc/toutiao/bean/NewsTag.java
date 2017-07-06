@@ -1,4 +1,4 @@
-package cn.edu.cuc.toutiao.beans;
+package cn.edu.cuc.toutiao.bean;
 
 /**
  * Created by zhengj on 2017/6/27.

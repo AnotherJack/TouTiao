@@ -1,7 +1,6 @@
-package cn.edu.cuc.toutiao.adapters;
+package cn.edu.cuc.toutiao.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

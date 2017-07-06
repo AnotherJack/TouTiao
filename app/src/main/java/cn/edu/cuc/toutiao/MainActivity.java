@@ -1,32 +1,21 @@
 package cn.edu.cuc.toutiao;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.edu.cuc.toutiao.fragments.FavFragment;
-import cn.edu.cuc.toutiao.fragments.HomeFragment;
-import cn.edu.cuc.toutiao.fragments.ProfileFragment;
-import cn.edu.cuc.toutiao.fragments.VideoFragment;
+import cn.edu.cuc.toutiao.fragment.FavFragment;
+import cn.edu.cuc.toutiao.fragment.HomeFragment;
+import cn.edu.cuc.toutiao.fragment.ProfileFragment;
+import cn.edu.cuc.toutiao.fragment.VideoFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;

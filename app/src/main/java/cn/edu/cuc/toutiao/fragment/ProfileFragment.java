@@ -1,4 +1,4 @@
-package cn.edu.cuc.toutiao.fragments;
+package cn.edu.cuc.toutiao.fragment;
 
 
 import android.os.Bundle;
