@@ -33,6 +33,14 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setSearchFocused(true);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(searchView.isSearchBarFocused()){
+            searchView.setSearchFocused(false);
+        }else {
+            SearchActivity.this.finish();
+        }
+    }
 
     //初始化searchView
     private void initSearchView(){
