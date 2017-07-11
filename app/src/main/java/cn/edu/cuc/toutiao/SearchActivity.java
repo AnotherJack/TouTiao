@@ -2,9 +2,14 @@ package cn.edu.cuc.toutiao;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.bumptech.glide.Glide;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -22,6 +27,21 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        initSearchView();
+
+        //searchView获取焦点
+        searchView.setSearchFocused(true);
+    }
+
+
+    //初始化searchView
+    private void initSearchView(){
+        searchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon, TextView textView, SearchSuggestion item, int itemPosition) {
+                Glide.with(SearchActivity.this).load(R.drawable.ic_history_grey_24dp).into(leftIcon);
+            }
+        });
 
         searchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
@@ -36,11 +56,32 @@ public class SearchActivity extends AppCompatActivity {
                 searchView.swapSuggestions(newSuggestions);
             }
         });
+
+        searchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+                List<SearchRecord> suggestions;
+                QueryBuilder<SearchRecord> qb = MyApp.getDaoSession()
+                        .getSearchRecordDao()
+                        .queryBuilder()
+                        .where(SearchRecordDao.Properties.Text.like("%"+searchView.getQuery()+"%"))
+                        .orderDesc(SearchRecordDao.Properties.Id);
+                suggestions = qb.list();
+                searchView.swapSuggestions(suggestions);
+            }
+
+            @Override
+            public void onFocusCleared() {
+
+            }
+        });
+
         searchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 String searchText = searchSuggestion.getBody();
                 searchView.setSearchText(searchText);
+                searchView.setSearchFocused(false);
                 this.onSearchAction(searchText);
             }
 
@@ -50,8 +91,11 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        //searchView获取焦点
-        searchView.setSearchFocused(true);
-        searchView.setSearchText("");
+        searchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
+            @Override
+            public void onHomeClicked() {
+                SearchActivity.this.finish();
+            }
+        });
     }
 }

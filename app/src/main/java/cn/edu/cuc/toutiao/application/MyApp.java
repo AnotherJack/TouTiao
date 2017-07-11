@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.ArrayList;
 
 import cn.edu.cuc.toutiao.PhotoActivity;
@@ -21,6 +23,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Stetho.initializeWithDefaults(this);
         setUpDatabase();
     }
 

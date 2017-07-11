@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:elevation="10dp"
-        app:layout_behavior="cn.edu.cuc.toutiao.behaviors.BottomNavigationBehavior"
+        app:tabGravity="fill"
+        app:layout_behavior="cn.edu.cuc.toutiao.behavior.BottomNavigationBehavior"
         app:tabIndicatorHeight="0dp">
         <android.support.design.widget.TabItem
             android:layout_height="wrap_content"
