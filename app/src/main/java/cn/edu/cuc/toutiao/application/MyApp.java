@@ -1,11 +1,13 @@
 package cn.edu.cuc.toutiao.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,12 @@ public class MyApp extends Application {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
         setUpDatabase();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     public static DaoSession getDaoSession(){
