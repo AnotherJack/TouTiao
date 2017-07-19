@@ -22,7 +22,7 @@ import cn.edu.cuc.toutiao.R;
  * Created by jack on 2017/7/1.
  */
 
-public class PhotoPagerAdapter extends PagerAdapter implements OnPhotoTapListener {
+public class PhotoPagerAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<String> urls;
     private SparseArray<View> cacheView;
@@ -40,10 +40,14 @@ public class PhotoPagerAdapter extends PagerAdapter implements OnPhotoTapListene
         if(view == null){
             view = LayoutInflater.from(context).inflate(R.layout.layout_photo_view,container,false);
             PhotoView photoView = view.findViewById(R.id.photoView);
-            Glide.with(context)
-                    .load(urls.get(position))
-                    .into(photoView);
-            photoView.setOnPhotoTapListener(this);
+            Glide.with(context).load(urls.get(position)).into(photoView);
+            photoView.setOnPhotoTapListener(new OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(ImageView view, float x, float y) {
+                    Activity activity = (Activity) context;
+                    activity.finish();
+                }
+            });
             cacheView.put(position,view);
         }
 
@@ -65,11 +69,5 @@ public class PhotoPagerAdapter extends PagerAdapter implements OnPhotoTapListene
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
-    }
-
-    @Override
-    public void onPhotoTap(ImageView view, float x, float y) {
-        Activity activity = (Activity) context;
-        activity.finish();
     }
 }
