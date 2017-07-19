@@ -40,7 +40,9 @@ public class PhotoPagerAdapter extends PagerAdapter implements OnPhotoTapListene
         if(view == null){
             view = LayoutInflater.from(context).inflate(R.layout.layout_photo_view,container,false);
             PhotoView photoView = view.findViewById(R.id.photoView);
-            Glide.with(context).load(urls.get(position)).into(photoView);
+            Glide.with(context)
+                    .load(urls.get(position))
+                    .into(photoView);
             photoView.setOnPhotoTapListener(this);
             cacheView.put(position,view);
         }
