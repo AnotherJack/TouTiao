@@ -15,25 +15,25 @@ import cn.edu.cuc.toutiao.fragment.NewsListFragment;
  */
 
 public class NewsPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<NewsTag> newsTags;
-    public NewsPagerAdapter(FragmentManager fm , ArrayList<NewsTag> newsTags) {
+    private ArrayList<String> types;
+    public NewsPagerAdapter(FragmentManager fm , ArrayList<String> types) {
         super(fm);
-        this.newsTags = newsTags;
+        this.types = types;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return NewsListFragment.newInstance(newsTags.get(position).getType());
+        return NewsListFragment.newInstance(types.get(position));
     }
 
     @Override
     public int getCount() {
-        return newsTags.size();
+        return types.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return newsTags.get(position).getTitle();
+        return types.get(position);
     }
 
     @Override

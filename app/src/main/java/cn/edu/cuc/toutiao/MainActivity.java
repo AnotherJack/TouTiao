@@ -7,15 +7,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 import cn.edu.cuc.toutiao.fragment.FavFragment;
 import cn.edu.cuc.toutiao.fragment.HomeFragment;
 import cn.edu.cuc.toutiao.fragment.ProfileFragment;
 import cn.edu.cuc.toutiao.fragment.VideoFragment;
+import cn.edu.cuc.toutiao.util.SPUtils;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initId();
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -61,39 +66,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initId() {
+        SPUtils spUtils = SPUtils.getInstance();
+        String uid = spUtils.getString("uid", "");
+        String gid = spUtils.getString("gid", "");
+        if (TextUtils.isEmpty(uid) && TextUtils.isEmpty(gid)) {
+            gid = UUID.randomUUID().toString();
+            spUtils.put("gid", gid);
+        }
+    }
+
     //设置显示哪个fragment
-    private void setContentFragment(int position){
+    private void setContentFragment(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        switch (position){
+        switch (position) {
             case 0:
-                if(homeFragment==null){
+                if (homeFragment == null) {
                     homeFragment = HomeFragment.newInstance();
-                    transaction.add(R.id.contentFrame,homeFragment);
+                    transaction.add(R.id.contentFrame, homeFragment);
                 }
                 hideFragments(transaction);
                 transaction.show(homeFragment);
                 break;
             case 1:
-                if(videoFragment==null){
+                if (videoFragment == null) {
                     videoFragment = VideoFragment.newInstance();
-                    transaction.add(R.id.contentFrame,videoFragment);
+                    transaction.add(R.id.contentFrame, videoFragment);
                 }
                 hideFragments(transaction);
                 transaction.show(videoFragment);
                 break;
             case 2:
-                if(favFragment==null){
+                if (favFragment == null) {
                     favFragment = FavFragment.newInstance();
-                    transaction.add(R.id.contentFrame,favFragment);
+                    transaction.add(R.id.contentFrame, favFragment);
                 }
                 hideFragments(transaction);
                 transaction.show(favFragment);
                 break;
             case 3:
-                if(profileFragment==null){
+                if (profileFragment == null) {
                     profileFragment = ProfileFragment.newInstance();
-                    transaction.add(R.id.contentFrame,profileFragment);
+                    transaction.add(R.id.contentFrame, profileFragment);
                 }
                 hideFragments(transaction);
                 transaction.show(profileFragment);
@@ -103,17 +118,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //hide所有的fragment
-    private void hideFragments( FragmentTransaction transaction){
-        if(homeFragment!=null){
+    private void hideFragments(FragmentTransaction transaction) {
+        if (homeFragment != null) {
             transaction.hide(homeFragment);
         }
-        if(videoFragment!=null){
+        if (videoFragment != null) {
             transaction.hide(videoFragment);
         }
-        if(favFragment!=null){
+        if (favFragment != null) {
             transaction.hide(favFragment);
         }
-        if(profileFragment!=null){
+        if (profileFragment != null) {
             transaction.hide(profileFragment);
         }
     }
@@ -121,17 +136,17 @@ public class MainActivity extends AppCompatActivity {
     //重写返回键事件
     @Override
     public void onBackPressed() {
-        if(canExit){
+        if (canExit) {
             finish();
-        }else {
+        } else {
             canExit = true;
-            Toast.makeText(MainActivity.this,"再按一次就放你走",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "再按一次就放你走", Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     canExit = false;
                 }
-            },2000);
+            }, 2000);
         }
     }
 }

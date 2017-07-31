@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import cn.edu.cuc.toutiao.PhotoActivity;
 import cn.edu.cuc.toutiao.greendao.DaoMaster;
 import cn.edu.cuc.toutiao.greendao.DaoSession;
+import cn.edu.cuc.toutiao.util.Utils;
 
 /**
  * Created by zhengj on 2017/6/30.
@@ -25,7 +26,11 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
+
         setUpDatabase();
+
+        Utils.init(getApplicationContext());
+
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
