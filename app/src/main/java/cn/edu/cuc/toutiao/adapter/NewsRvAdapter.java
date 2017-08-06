@@ -1,27 +1,35 @@
 package cn.edu.cuc.toutiao.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import cn.edu.cuc.toutiao.R;
+import cn.edu.cuc.toutiao.bean.Recommendation;
 
 public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<String> newsList;
+    private ArrayList<Recommendation.NewsItem> newsList;
     private ArrayList<View> footers = new ArrayList<>();
+    private Context context;
 
-    final int TYPE_0 = 0;
-    final int TYPE_1 = 1;
-    final int TYPE_2 = 2;
-    final int TYPE_3 = 3;
-    final int TYPE_FOOTER = 4;
+    private final int TYPE_0 = 0;
+    private final int TYPE_1 = 1;
+    private final int TYPE_2 = 2;
+    private final int TYPE_3 = 3;
+    private final int TYPE_FOOTER = 4;
     float mX, mY, mCurrentX, mCurrentY;
 
 
-    public NewsRvAdapter(ArrayList<String> newsList) {
+    public NewsRvAdapter(Context context,ArrayList<Recommendation.NewsItem> newsList) {
+        this.context = context;
         this.newsList = newsList;
     }
 
@@ -58,24 +66,27 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-
         if (holder instanceof MyHolder0) {
-            ((MyHolder0) holder).mTextView.setText(newsList.get(position));
-            ((MyHolder0) holder).mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), ((TextView) v).getText() + " clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
+            ((MyHolder0) holder).title.setText(newsList.get(position).getChineseTitle());
+            ((MyHolder0) holder).country.setText(newsList.get(position).getCountry());
         } else if (holder instanceof MyHolder1) {
-            ((MyHolder1) holder).mTextView.setText(newsList.get(position));
-            ((MyHolder1) holder).mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), ((TextView) v).getText() + " clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+            ((MyHolder1) holder).title.setText(newsList.get(position).getChineseTitle());
+            ((MyHolder1) holder).country.setText(newsList.get(position).getCountry());
+            String[] imgs = newsList.get(position).getImgs().split(" ");
+            Glide.with(context).load(imgs[0]).into(((MyHolder1) holder).img);
+        }else if (holder instanceof MyHolder2) {
+            ((MyHolder2) holder).title.setText(newsList.get(position).getChineseTitle());
+            ((MyHolder2) holder).country.setText(newsList.get(position).getCountry());
+            String[] imgs = newsList.get(position).getImgs().split(" ");
+            Glide.with(context).load(imgs[0]).into(((MyHolder2) holder).img1);
+            Glide.with(context).load(imgs[0]).into(((MyHolder2) holder).img2);
+        }else if (holder instanceof MyHolder3) {
+            ((MyHolder3) holder).title.setText(newsList.get(position).getChineseTitle());
+            ((MyHolder3) holder).country.setText(newsList.get(position).getCountry());
+            String[] imgs = newsList.get(position).getImgs().split(" ");
+            Glide.with(context).load(imgs[0]).into(((MyHolder3) holder).img1);
+            Glide.with(context).load(imgs[0]).into(((MyHolder3) holder).img2);
+            Glide.with(context).load(imgs[0]).into(((MyHolder3) holder).img3);
         }else if(holder instanceof FooterHolder){
 
         }
@@ -93,26 +104,71 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return TYPE_FOOTER;
         }
 
-        return Integer.parseInt(newsList.get(position)) % 2;
+        String[] imgs = newsList.get(position).getImgs().split(" ");
+        if(imgs.length>3){
+            return TYPE_3;
+        }else {
+            return imgs.length;
+        }
     }
 
     //内部holder类
     public static class MyHolder0 extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        public TextView title;
+        public TextView country;
 
         public MyHolder0(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.title);
+            title = v.findViewById(R.id.title);
+            country = v.findViewById(R.id.country);
         }
     }
 
     //内部holder类
     public static class MyHolder1 extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        public TextView title;
+        public TextView country;
+        public ImageView img;
 
         public MyHolder1(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.title);
+            title = v.findViewById(R.id.title);
+            country = v.findViewById(R.id.country);
+            img = v.findViewById(R.id.img);
+        }
+    }
+
+    //内部holder类
+    public static class MyHolder2 extends RecyclerView.ViewHolder {
+        public TextView title;
+        public TextView country;
+        public ImageView img1;
+        public ImageView img2;
+
+        public MyHolder2(View v) {
+            super(v);
+            title = v.findViewById(R.id.title);
+            country = v.findViewById(R.id.country);
+            img1 = v.findViewById(R.id.img1);
+            img2 = v.findViewById(R.id.img2);
+        }
+    }
+
+    //内部holder类
+    public static class MyHolder3 extends RecyclerView.ViewHolder {
+        public TextView title;
+        public TextView country;
+        public ImageView img1;
+        public ImageView img2;
+        public ImageView img3;
+
+        public MyHolder3(View v) {
+            super(v);
+            title = v.findViewById(R.id.title);
+            country = v.findViewById(R.id.country);
+            img1 = v.findViewById(R.id.img1);
+            img2 = v.findViewById(R.id.img2);
+            img3 = v.findViewById(R.id.img3);
         }
     }
 

@@ -1,21 +1,37 @@
 package cn.edu.cuc.toutiao.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.animation.BaseAnimation;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import cn.edu.cuc.toutiao.NewsContentActivity;
 import cn.edu.cuc.toutiao.R;
-import cn.edu.cuc.toutiao.adapter.NewsRvAdapter;
+import cn.edu.cuc.toutiao.adapter.NewsRvQuickAdapter;
+import cn.edu.cuc.toutiao.bean.Recommendation;
+import cn.edu.cuc.toutiao.retrofit.ApiService;
+import cn.edu.cuc.toutiao.retrofit.ServiceGenerator;
+import cn.edu.cuc.toutiao.util.SPUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,12 +42,13 @@ public class NewsListFragment extends LazyFragment {
     private String type;
     private SwipeRefreshLayout swipeLayout;
     private RecyclerView recyclerView;
-    private ArrayList<String> newsList = new ArrayList<>();
-    private NewsRvAdapter newsRvAdapter;
+    private NewsRvQuickAdapter newsRvQuickAdapter;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
-    private boolean canLoadmore = false;
-    private boolean loading = false;
-    private View footer_loadmore;
+    private ApiService apiService;
+    private String gid;
+    private String uid;
+    private Gson gson = new GsonBuilder().create();
+    private View rootView;
 
     public NewsListFragment() {
         // Required empty public constructor
@@ -51,79 +68,57 @@ public class NewsListFragment extends LazyFragment {
         if (getArguments() != null) {
             type = getArguments().getString("type");
         }
-        footer_loadmore = LayoutInflater.from(getActivity()).inflate(R.layout.footer_loadmore, null);
+        apiService = ServiceGenerator.createService(ApiService.class);
+        initId();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
-//        TextView tv = (TextView) rootView.findViewById(R.id.type);
-//        tv.setText(type);
-        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeLayout);
-        swipeLayout.setColorSchemeResources(R.color.colorAccent);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(newsRvAdapter = new NewsRvAdapter(newsList));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                //获取最后一个完全显示的ItemPosition
-                int lastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                int totalItemCount = linearLayoutManager.getItemCount();
-                if(lastVisibleItem >= (totalItemCount-3) && !loading && !swipeLayout.isRefreshing() && canLoadmore){
-                    //TODO 加载更多
-                    setLoading(true);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            newsList.add("1");
-                            newsList.add("2");
-                            newsList.add("3");
-                            newsList.add("4");
-                            newsList.add("5");
-                            newsList.add("6");
-                            newsList.add("7");
-                            newsList.add("8");
-                            newsList.add("9");
-                            newsList.add("10");
-                            newsList.add("11");
-                            newsRvAdapter.notifyDataSetChanged();
-                            setLoading(false);
-                        }
-                    }, 2000);
+        if(rootView == null){
+            rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
+            swipeLayout = rootView.findViewById(R.id.swipeLayout);
+            swipeLayout.setColorSchemeResources(R.color.colorAccent);
+            recyclerView = rootView.findViewById(R.id.recyclerView);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            newsRvQuickAdapter = new NewsRvQuickAdapter(new ArrayList());
+            newsRvQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                @Override
+                public void onLoadMoreRequested() {
+                    loadData();
                 }
+            },recyclerView);
+            newsRvQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    Recommendation.NewsItem newsItem = (Recommendation.NewsItem) adapter.getItem(position);
+                    Intent intent = new Intent(getActivity(), NewsContentActivity.class);
+                    intent.putExtra("newsId",newsItem.getId());
+                    intent.putExtra("type",newsItem.getType());
+                    startActivity(intent);
+                }
+            });
+            recyclerView.setAdapter(newsRvQuickAdapter);
+            newsRvQuickAdapter.setEmptyView(R.layout.empty_view);
+
+
+            refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    //TODO  下拉刷新
+                    swipeLayout.setRefreshing(true);
+                    newsRvQuickAdapter.getData().clear();
+                    loadData();
+                }
+            };
+            swipeLayout.setOnRefreshListener(refreshListener);
+        }else {
+            //如果rootView不为null，说明不是第一次调用，直接返回rootView，方法体中的代码是解决（Java.lang.IllegalStateException: The specified child already has a parent）异常的
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
             }
-        });
-        refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeLayout.setRefreshing(true);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        newsList.clear();
-                        newsList.add("1");
-                        newsList.add("2");
-                        newsList.add("3");
-                        newsList.add("4");
-                        newsList.add("5");
-                        newsList.add("6");
-                        newsList.add("7");
-                        newsList.add("8");
-                        newsList.add("9");
-                        newsList.add("10");
-                        newsList.add("11");
-                        newsRvAdapter.notifyDataSetChanged();
-                        swipeLayout.setRefreshing(false);
-                        canLoadmore = true;
-                    }
-                }, 2000);
-            }
-        };
-        swipeLayout.setOnRefreshListener(refreshListener);
+        }
 
         return rootView;
     }
@@ -141,14 +136,49 @@ public class NewsListFragment extends LazyFragment {
         });
 
     }
-
-    //切换加载更多状态
-    private void setLoading(boolean bl) {
-        this.loading = bl;
-        if (bl) {
-            newsRvAdapter.addFooterView(footer_loadmore);
-        } else {
-            newsRvAdapter.removeFooterView(footer_loadmore);
-        }
+    private void initId(){
+        SPUtils spUtils = SPUtils.getInstance();
+        uid = spUtils.getString("uid", "");
+        gid = spUtils.getString("gid", "");
     }
+
+    private void loadData(){
+        Call<Recommendation> call = apiService.getRec(type,gid,uid,10,"","");
+        call.enqueue(new Callback<Recommendation>() {
+            @Override
+            public void onResponse(Call<Recommendation> call, Response<Recommendation> response) {
+                Recommendation recommendation = response.body();
+                List<Recommendation.NewsItem> newsList = recommendation.getNews();
+                newsRvQuickAdapter.getData().addAll(newsList);
+                newsRvQuickAdapter.notifyDataSetChanged();
+                Log.d("RESP----",gson.toJson(recommendation));
+
+                if(swipeLayout.isRefreshing()){
+                    //如果是刷新
+                    swipeLayout.setRefreshing(false);
+                }else {
+                    //否则就是上拉加载
+                    if(newsList.isEmpty()){
+                        newsRvQuickAdapter.loadMoreEnd();
+                    }else {
+                        newsRvQuickAdapter.loadMoreComplete();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Recommendation> call, Throwable t) {
+                Toast.makeText(getActivity(),"出错了",Toast.LENGTH_SHORT).show();
+
+                if(swipeLayout.isRefreshing()){
+                    //如果是刷新
+                    swipeLayout.setRefreshing(false);
+                }else {
+                    //否则就是上拉加载
+                    newsRvQuickAdapter.loadMoreFail();
+                }
+            }
+        });
+    }
+
 }
