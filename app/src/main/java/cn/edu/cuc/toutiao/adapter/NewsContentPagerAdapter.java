@@ -41,6 +41,11 @@ public class NewsContentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public CharSequence getPageTitle(int position) {
+        return languages.get(position);
+    }
+
+    @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
     }

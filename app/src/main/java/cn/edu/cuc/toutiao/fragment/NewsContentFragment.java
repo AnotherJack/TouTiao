@@ -3,19 +3,24 @@ package cn.edu.cuc.toutiao.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.zzhoujay.richtext.RichText;
+import com.zzhoujay.richtext.callback.OnImageClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.edu.cuc.toutiao.R;
+import cn.edu.cuc.toutiao.application.MyApp;
 
 public class NewsContentFragment extends Fragment {
     private String title;
-    private String[] contentItem;
+    private String content;
     private String[] imgs;
-    private static final int TYPE_TEXT = 0;
-    private static final int TYPE_IMG = 1;
 
 
     public NewsContentFragment() {
@@ -37,7 +42,7 @@ public class NewsContentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString("title");
-            contentItem = getArguments().getString("content").split(" ");
+            content = getArguments().getString("content");
             imgs = getArguments().getString("imgs").split(" ");
         }
     }
@@ -46,7 +51,22 @@ public class NewsContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_news_content, container, false);
-        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        TextView content_tv = rootView.findViewById(R.id.content);
+        for(int i=0;i<imgs.length;i++){
+            content = content.replaceAll("\\["+i+"\\]","<img src='"+imgs[i]+"'/>");
+        }
+        RichText.from(content.replaceAll("(\r\n)+","<br/><br/>"))
+                .placeHolder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .clickable(true)
+                .imageClick(new OnImageClickListener() {
+                    @Override
+                    public void imageClicked(List<String> imageUrls, int position) {
+                        ArrayList<String> urls = new ArrayList<String>(imageUrls);
+                        MyApp.browsePhotos(getActivity(),urls,position);
+                    }
+                })
+                .into(content_tv);
         return rootView;
     }
 

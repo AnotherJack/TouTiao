@@ -1,7 +1,6 @@
 package cn.edu.cuc.toutiao.adapter;
 
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -40,7 +39,7 @@ public class NewsRvQuickAdapter extends BaseMultiItemQuickAdapter<Recommendation
         addItemType(Recommendation.NewsItem.TYPE_3, R.layout.news_item3);
 
         requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.loading)
+        requestOptions.placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
                 .centerCrop();
 

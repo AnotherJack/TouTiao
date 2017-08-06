@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ public class NewsContentActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
+        getNews();
     }
 
     private void initId(){
@@ -58,11 +60,13 @@ public class NewsContentActivity extends AppCompatActivity {
                 NewsDetail newsDetail = response.body();
                 viewPager.setAdapter(new NewsContentPagerAdapter(getSupportFragmentManager(),languages,newsDetail));
                 tabLayout.setupWithViewPager(viewPager);
+                tabLayout.getTabAt(0).setCustomView(R.layout.lang_item_cn);
+                tabLayout.getTabAt(1).setCustomView(R.layout.lang_item_origin);
             }
 
             @Override
             public void onFailure(Call<NewsDetail> call, Throwable t) {
-
+                Toast.makeText(NewsContentActivity.this,"出错了",Toast.LENGTH_SHORT).show();
             }
         });
     }
