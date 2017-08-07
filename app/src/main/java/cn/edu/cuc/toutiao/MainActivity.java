@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initId();
+        initLocalId();
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         setContentFragment(0);
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initId() {
+    private void initLocalId() {
         SPUtils spUtils = SPUtils.getInstance();
         String uid = spUtils.getString("uid", "");
         String gid = spUtils.getString("gid", "");

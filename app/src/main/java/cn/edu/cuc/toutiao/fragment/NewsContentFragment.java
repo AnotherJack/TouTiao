@@ -1,8 +1,10 @@
 package cn.edu.cuc.toutiao.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,13 +58,14 @@ public class NewsContentFragment extends Fragment {
             content = content.replaceAll("\\["+i+"\\]","<img src='"+imgs[i]+"'/>");
         }
         RichText.from(content.replaceAll("(\r\n)+","<br/><br/>"))
+                .borderColor(Color.RED)
                 .placeHolder(R.drawable.placeholder)
                 .error(R.drawable.error)
-                .clickable(true)
                 .imageClick(new OnImageClickListener() {
                     @Override
                     public void imageClicked(List<String> imageUrls, int position) {
-                        ArrayList<String> urls = new ArrayList<String>(imageUrls);
+                        Log.d("RichText------","---------image clicked!");
+                        ArrayList<String> urls = new ArrayList<>(imageUrls);
                         MyApp.browsePhotos(getActivity(),urls,position);
                     }
                 })

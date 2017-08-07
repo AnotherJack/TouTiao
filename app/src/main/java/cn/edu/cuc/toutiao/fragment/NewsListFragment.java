@@ -107,7 +107,6 @@ public class NewsListFragment extends LazyFragment {
                 public void onRefresh() {
                     //TODO  下拉刷新
                     swipeLayout.setRefreshing(true);
-                    newsRvQuickAdapter.getData().clear();
                     loadData();
                 }
             };
@@ -149,21 +148,22 @@ public class NewsListFragment extends LazyFragment {
             public void onResponse(Call<Recommendation> call, Response<Recommendation> response) {
                 Recommendation recommendation = response.body();
                 List<Recommendation.NewsItem> newsList = recommendation.getNews();
-                newsRvQuickAdapter.getData().addAll(newsList);
-                newsRvQuickAdapter.notifyDataSetChanged();
-                Log.d("RESP----",gson.toJson(recommendation));
 
                 if(swipeLayout.isRefreshing()){
                     //如果是刷新
+                    newsRvQuickAdapter.setNewData(newsList);
                     swipeLayout.setRefreshing(false);
                 }else {
                     //否则就是上拉加载
+                    newsRvQuickAdapter.getData().addAll(newsList);
                     if(newsList.isEmpty()){
                         newsRvQuickAdapter.loadMoreEnd();
                     }else {
                         newsRvQuickAdapter.loadMoreComplete();
                     }
                 }
+                newsRvQuickAdapter.notifyDataSetChanged();
+
             }
 
             @Override
