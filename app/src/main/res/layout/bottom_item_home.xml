@@ -7,11 +7,11 @@
         android:id="@+id/icon"
         android:checked="true"
         android:layout_gravity="center"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:clickable="false"
         android:longClickable="false"
-        android:background="@drawable/fav_checkbox_selector"
+        android:background="@drawable/home_checkbox_selector"
         android:button="@null"/>
     <TextView
         android:id="@+id/text"

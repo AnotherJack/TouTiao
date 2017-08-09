@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.zzhoujay.richtext.ImageHolder;
 import com.zzhoujay.richtext.RichText;
+import com.zzhoujay.richtext.callback.ImageFixCallback;
 import com.zzhoujay.richtext.callback.OnImageClickListener;
 
 import java.util.ArrayList;
@@ -87,7 +89,7 @@ public class NewsContentFragment extends Fragment {
         for(int i=0;i<imgs.length;i++){
             content = content.replaceAll("\\["+i+"\\]","<img src='"+imgs[i]+"'/>");
         }
-        RichText.from(content.replaceAll("(\r\n)+","<br/><br/>"))
+        RichText.from(content.replaceAll("(\n)+","<br/><br/>"))
                 .borderColor(Color.RED)
                 .placeHolder(R.drawable.placeholder)
                 .error(R.drawable.error)
