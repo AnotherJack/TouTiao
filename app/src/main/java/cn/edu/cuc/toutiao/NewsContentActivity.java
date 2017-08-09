@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import cn.edu.cuc.toutiao.adapter.NewsContentPagerAdapter;
 import cn.edu.cuc.toutiao.bean.NewsDetail;
+import cn.edu.cuc.toutiao.bean.Recommendation;
 import cn.edu.cuc.toutiao.retrofit.ApiService;
 import cn.edu.cuc.toutiao.retrofit.ServiceGenerator;
 import cn.edu.cuc.toutiao.util.SPUtils;
@@ -29,6 +30,9 @@ public class NewsContentActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ArrayList<String> languages = new ArrayList<>();
+    private NewsDetail newsDetail;
+    private Recommendation recommendation;
+    private View loadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class NewsContentActivity extends AppCompatActivity {
         apiService = ServiceGenerator.createService(ApiService.class);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        loadingView = findViewById(R.id.loading_view);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,15 +68,33 @@ public class NewsContentActivity extends AppCompatActivity {
         call.enqueue(new Callback<NewsDetail>() {
             @Override
             public void onResponse(Call<NewsDetail> call, Response<NewsDetail> response) {
-                NewsDetail newsDetail = response.body();
-                viewPager.setAdapter(new NewsContentPagerAdapter(getSupportFragmentManager(),languages,newsDetail));
+                newsDetail = response.body();
+                getRec();
+            }
+
+            @Override
+            public void onFailure(Call<NewsDetail> call, Throwable t) {
+                Toast.makeText(NewsContentActivity.this,"出错了",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getRec(){
+        Call<Recommendation> call = apiService.getRecByNews(newsId,gid,uid,6);
+        call.enqueue(new Callback<Recommendation>() {
+            @Override
+            public void onResponse(Call<Recommendation> call, Response<Recommendation> response) {
+                recommendation = response.body();
+                loadingView.setVisibility(View.INVISIBLE);
+
+                viewPager.setAdapter(new NewsContentPagerAdapter(getSupportFragmentManager(),languages,newsDetail,recommendation));
                 tabLayout.setupWithViewPager(viewPager);
                 tabLayout.getTabAt(0).setCustomView(R.layout.lang_item_cn);
                 tabLayout.getTabAt(1).setCustomView(R.layout.lang_item_origin);
             }
 
             @Override
-            public void onFailure(Call<NewsDetail> call, Throwable t) {
+            public void onFailure(Call<Recommendation> call, Throwable t) {
                 Toast.makeText(NewsContentActivity.this,"出错了",Toast.LENGTH_SHORT).show();
             }
         });

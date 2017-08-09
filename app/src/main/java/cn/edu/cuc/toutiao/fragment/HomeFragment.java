@@ -126,14 +126,14 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add:
-//                showPopup();
-                MyApp.browsePhotos(getActivity(),photoUrls,3);
-                break;
-            case R.id.edit:
-                Intent editIntent = new Intent(getActivity(), EditorActivity.class);
-                startActivity(editIntent);
-                break;
+//            case R.id.add:
+////                showPopup();
+//                MyApp.browsePhotos(getActivity(),photoUrls,3);
+//                break;
+//            case R.id.edit:
+//                Intent editIntent = new Intent(getActivity(), EditorActivity.class);
+//                startActivity(editIntent);
+//                break;
             case R.id.search:
                 Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(searchIntent);

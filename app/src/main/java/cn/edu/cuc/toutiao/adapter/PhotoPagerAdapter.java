@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -23,6 +24,7 @@ import cn.edu.cuc.toutiao.R;
  */
 
 public class PhotoPagerAdapter extends PagerAdapter {
+    private RequestOptions requestOptions;
     private Context context;
     private ArrayList<String> urls;
     private SparseArray<View> cacheView;
@@ -31,6 +33,9 @@ public class PhotoPagerAdapter extends PagerAdapter {
         this.context = context;
         this.urls = urls;
         cacheView = new SparseArray<>(urls.size());
+        requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.placeholder)
+                .error(R.drawable.error);
     }
 
     @Override

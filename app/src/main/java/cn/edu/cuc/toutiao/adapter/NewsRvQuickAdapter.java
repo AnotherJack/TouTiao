@@ -59,7 +59,7 @@ public class NewsRvQuickAdapter extends BaseMultiItemQuickAdapter<Recommendation
 
     @Override
     protected void convert(BaseViewHolder helper, Recommendation.NewsItem item) {
-        helper.setText(R.id.title, item.getChineseTitle())
+        helper.setText(R.id.title, item.getChineseTitle().trim())
                 .setText(R.id.country,item.getCountry());
         String[] imgs = item.getImgs().trim().split(" ");
         switch (helper.getItemViewType()) {

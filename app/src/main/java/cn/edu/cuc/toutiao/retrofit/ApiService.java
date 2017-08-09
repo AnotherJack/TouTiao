@@ -22,4 +22,8 @@ public interface ApiService {
 
     @GET("getNews")
     Call<NewsDetail> getNews(@Query("newsid") String newsId,@Query("gid")String gid,@Query("uid") String uid);
+
+    @GET("getRecByNews")
+    Call<Recommendation> getRecByNews(@Query("newsid") String newsId,@Query("gid") String gid,@Query("uid")String uid,@Query("sum")int sum);
+
 }
