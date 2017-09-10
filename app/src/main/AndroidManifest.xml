@@ -26,7 +26,8 @@
             android:name=".PhotoActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".EditorActivity" />
-        <activity android:name=".NewsContentActivity"></activity>
+        <activity android:name=".NewsContentActivity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

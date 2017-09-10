@@ -15,11 +15,17 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
+import cn.edu.cuc.toutiao.bean.RSA;
 import cn.edu.cuc.toutiao.fragment.FavFragment;
 import cn.edu.cuc.toutiao.fragment.HomeFragment;
 import cn.edu.cuc.toutiao.fragment.ProfileFragment;
 import cn.edu.cuc.toutiao.fragment.VideoFragment;
+import cn.edu.cuc.toutiao.retrofit.ApiService;
+import cn.edu.cuc.toutiao.retrofit.ServiceGenerator;
 import cn.edu.cuc.toutiao.util.SPUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -64,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this,"reselected",Toast.LENGTH_SHORT).show();
             }
         });
+
+        getRSA();
     }
 
     private void initLocalId() {
@@ -147,6 +155,25 @@ public class MainActivity extends AppCompatActivity {
                     canExit = false;
                 }
             }, 2000);
+        }
+    }
+
+    private void getRSA(){
+        final SPUtils spUtils = SPUtils.getInstance();
+        if(!spUtils.contains("rsa_pulic_key")){
+            ApiService apiService = ServiceGenerator.createService(ApiService.class);
+            Call<RSA> call = apiService.getRsa();
+            call.enqueue(new Callback<RSA>() {
+                @Override
+                public void onResponse(Call<RSA> call, Response<RSA> response) {
+                    spUtils.put("rsa_pulic_key",response.body().getRsa_pulic_key());
+                }
+
+                @Override
+                public void onFailure(Call<RSA> call, Throwable t) {
+
+                }
+            });
         }
     }
 }
