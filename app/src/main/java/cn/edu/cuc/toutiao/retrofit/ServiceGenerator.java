@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ServiceGenerator {
-    public static final String API_BASE_URL = "http://icuc.cuc.edu.cn/proj/";
+    public static final String API_BASE_URL = "http://earth.cuc.edu.cn/proj/";
 
     private static OkHttpClient httpClient = new OkHttpClient();
     private static Retrofit.Builder builder =
