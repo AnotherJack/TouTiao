@@ -20,6 +20,9 @@ public interface ApiService {
     @GET("getTypes")
     Call<ArrayList<String>> getTypes(@Query("gid") String gid,@Query("uid") String uid);
 
+    @GET("getLanguages")
+    Call<ArrayList<String>> getLanguages(@Query("gid") String gid,@Query("uid") String uid);
+
     @GET("getRec")
     Call<Recommendation> getRec(@Query("type") String type,@Query("gid") String gid,@Query("uid") String uid,
                                 @Query("sum") int sum,@Query("country") String country,@Query("language") String language);

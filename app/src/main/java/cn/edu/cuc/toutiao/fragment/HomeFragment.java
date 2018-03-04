@@ -43,8 +43,8 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     private TabLayout newsTabLayout;
     private ViewPager viewPager;
     private ArrayList<String> types = new ArrayList<>();
+    private ArrayList<String> languages = new ArrayList<>();
     private NewsPagerAdapter newsPagerAdapter;
-    private ArrayList<String> photoUrls = new ArrayList<>();
     private PopupWindow popupWindow;
     private String uid;
     private String gid;
@@ -72,14 +72,6 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/EternalFlame_EN-CA10974314579_1920x1080.jpg");
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/SunwaptaFalls_PT-BR9240176817_1920x1080.jpg");
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/OsmaniaHospital_EN-IN8052196074_1920x1080.jpg");
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/TourdefranceD_EN-AU8654672839_1920x1080.jpg");
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/LakePukaki_ROW12938827408_1920x1080.jpg");
-        photoUrls.add("http://www.bing.com/az/hprichbg/rb/RanwuLake_EN-CA11972106071_1920x1080.jpg");
-        photoUrls.add("http://blog.pic.xiaokui.io/5bc23947c22f5ea4bf0cf4fecb85c19b");
-
         mainContent = rootView.findViewById(R.id.main_content);
         toolbar = rootView.findViewById(R.id.toolbar);
         viewPager = rootView.findViewById(R.id.viewPager);
@@ -88,14 +80,16 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         toolbar.inflateMenu(R.menu.menu_home_toolbar);
         toolbar.setOnMenuItemClickListener(this);
 
-        newsPagerAdapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager(),types);
+//        newsPagerAdapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager(),types);
+        newsPagerAdapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager(),languages);
         viewPager.setAdapter(newsPagerAdapter);
 
         newsTabLayout.setupWithViewPager(viewPager);
         newsTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         //加载types
-        getTypes();
+//        getTypes();
+        getLanguages();
 
         return rootView;
     }
@@ -112,6 +106,23 @@ public class HomeFragment extends Fragment implements Toolbar.OnMenuItemClickLis
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
                 types.addAll(response.body());
+                newsPagerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+                Toast.makeText(getActivity(),"出错了",Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void getLanguages(){
+        Call<ArrayList<String>> call = api.getLanguages(gid,uid);
+        call.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+                languages.addAll(response.body());
                 newsPagerAdapter.notifyDataSetChanged();
             }
 

@@ -39,7 +39,7 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class NewsListFragment extends LazyFragment {
-    private String type;
+    private String language;
     private SwipeRefreshLayout swipeLayout;
     private RecyclerView recyclerView;
     private NewsRvQuickAdapter newsRvQuickAdapter;
@@ -54,10 +54,10 @@ public class NewsListFragment extends LazyFragment {
         // Required empty public constructor
     }
 
-    public static NewsListFragment newInstance(String type) {
+    public static NewsListFragment newInstance(String language) {
         NewsListFragment fragment = new NewsListFragment();
         Bundle args = new Bundle();
-        args.putString("type", type);
+        args.putString("language", language);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +66,7 @@ public class NewsListFragment extends LazyFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            type = getArguments().getString("type");
+            language = getArguments().getString("language");
         }
         apiService = ServiceGenerator.createService(ApiService.class);
         initId();
@@ -142,7 +142,7 @@ public class NewsListFragment extends LazyFragment {
     }
 
     private void loadData(){
-        Call<Recommendation> call = apiService.getRec(type,gid,uid,10,"","");
+        Call<Recommendation> call = apiService.getRec("",gid,uid,10,"",language);
         call.enqueue(new Callback<Recommendation>() {
             @Override
             public void onResponse(Call<Recommendation> call, Response<Recommendation> response) {
